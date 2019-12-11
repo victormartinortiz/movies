@@ -5,7 +5,9 @@
     "node": true
   },
   "extends": [
-    "airbnb"
+    "airbnb",
+    "prettier",
+    "prettier/react"
   ],
   "globals": {
     "document": false,

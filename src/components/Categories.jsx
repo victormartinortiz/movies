@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import '../assets/styles/components/Categories.scss';
 
@@ -8,5 +9,10 @@ const Categories = ({ children, title }) => (
     {children}
   </div>
 );
+
+Categories.prototype = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired
+}
 
 export default Categories;
