@@ -1,12 +1,18 @@
+@import '../Vars.scss';
+
 .header {
   align-items: center;
-  background: #8f57fd;
+  background: $main-color;
   color: white;
   display: flex;
   height: 100px;
   justify-content: space-between;
   top: 0px;
   width: 100%;
+
+    &--loginOrRegister{
+      background: $secondary-color;
+    }
   
     &__img {
       margin-left: 30px;
@@ -55,6 +61,7 @@
       & img {
         margin-right: 8px;
         width: 40px;
+        border-radius: 50%;
       }
     }
   }

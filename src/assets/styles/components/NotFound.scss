@@ -1,0 +1,37 @@
+.errorpage {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 150px 10px 0 10px;
+  background-color: #15210a;
+
+  &-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  &-topImage {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background: url('../../static/stars.png');
+  }
+
+  &-image {
+    max-width: 340px;
+    margin: 0;
+  }
+
+  &-image img {
+    width: 100%;
+    margin: 0;
+  }
+
+  &-text {
+    text-align: center;
+    color: whitesmoke;
+  }
+}
