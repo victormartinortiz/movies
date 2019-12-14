@@ -42,16 +42,11 @@ const Header = props => {
             </div>
             <ul>
               {hasUser ? (
-                <>
-                  <li>
-                    <Link to='/'>{user.name}</Link>
-                  </li>
-                  <li>
-                    <Link to='#logout' onClick={handleLogout}>
-                      Cerrar Sesión
-                    </Link>
-                  </li>
-                </>
+                <li>
+                  <Link to='#logout' onClick={handleLogout}>
+                    Cerrar Sesión
+                  </Link>
+                </li>
               ) : (
                 <li>
                   <Link to='/login'>Iniciar Sesión</Link>
@@ -66,8 +61,8 @@ const Header = props => {
 };
 
 Header.propTypes = {
-  user: propTypes.object.isRequired
-}
+  user: propTypes.object
+};
 
 const mapStateToProps = state => {
   return {

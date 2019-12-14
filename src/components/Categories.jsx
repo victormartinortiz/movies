@@ -12,7 +12,7 @@ const Categories = ({ children, title }) => (
 
 Categories.prototype = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.any.isRequired
+  children: PropTypes.node.isRequired
 }
 
 export default Categories;

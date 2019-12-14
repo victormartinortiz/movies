@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Search from '../components/Search';
 import Categories from '../components/Categories';
@@ -8,14 +9,13 @@ import CarouselItem from '../components/CarouselItem';
 
 import '../assets/styles/App.scss';
 
-/* const API = 'http://localhost:3000/initalState';
-// 'https://yts.lt/api/v2/list_movies.json';
- */
-const Home = ({ myList, trends, originals }) => {
+const Home = props => {
+  const { myList, trends, originals } = props;
 
   return (
     <>
       <Search />
+
       {myList.length > 0 && (
         <Categories title='My List'>
           <Carousel>
@@ -45,6 +45,12 @@ const Home = ({ myList, trends, originals }) => {
       </Categories>
     </>
   );
+};
+
+Home.propTypes = {
+  myList: PropTypes.array,
+  trends: PropTypes.array,
+  originals: PropTypes.array
 };
 
 const mapStateToProps = state => {

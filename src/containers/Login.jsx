@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { loginRequest } from '../actions/index';
 
 import googleIcon from '../assets/static/google-icon.png';
@@ -73,6 +74,10 @@ const Login = props => {
     </section>
   );
 };
+
+Login.propTypes = {
+  loginRequest: PropTypes.func
+}
 
 const mapDispatchToProps = {
   loginRequest,

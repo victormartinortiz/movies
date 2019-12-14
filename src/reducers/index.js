@@ -45,9 +45,40 @@ const reducer = (state, action) => {
           []
       };
 
+    case 'SEARCH_REQUEST':
+      if (action.payload === '') {
+        return {
+          ...state,
+          search: []
+        };
+      }
+
+      return {
+        ...state,
+        search:
+          state.trends.filter(item =>
+            item.title.toLowerCase().includes(action.payload.toLowerCase())
+          ) ||
+          state.originals.filter(item =>
+            item.title.toLowerCase().includes(action.payload.toLowerCase())
+          ) ||
+          state.myList.filter(item =>
+            item.title.toLowerCase().includes(action.payload.toLowerCase())
+          ) ||
+          []
+      };
+
     default:
       return state;
   }
 };
 
 export default reducer;
+
+/* ||
+            state.originals.filter(item =>
+              item.title.toLowerCase().includes(action.payload.toLowerCase())
+            ) ||
+            state.myList.filter(item =>
+              item.title.toLowerCase().includes(action.payload.toLowerCase())
+            ) */

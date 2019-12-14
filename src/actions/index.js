@@ -28,4 +28,17 @@ const getVideoSource = payload => ({
   payload
 });
 
-module.exports = { setFavorite, deleteFavorite, loginRequest, logoutRequest, registerRequest, getVideoSource };
+const searchRequest = payload => ({
+  type: 'SEARCH_REQUEST',
+  payload
+})
+
+module.exports = {
+  setFavorite,
+  deleteFavorite,
+  loginRequest,
+  logoutRequest,
+  registerRequest,
+  getVideoSource,
+  searchRequest
+};
