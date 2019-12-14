@@ -74,11 +74,3 @@ const reducer = (state, action) => {
 };
 
 export default reducer;
-
-/* ||
-            state.originals.filter(item =>
-              item.title.toLowerCase().includes(action.payload.toLowerCase())
-            ) ||
-            state.myList.filter(item =>
-              item.title.toLowerCase().includes(action.payload.toLowerCase())
-            ) */

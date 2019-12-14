@@ -14,7 +14,6 @@ const Search = (props) => {
   const hasSearch = Object.keys(search).length > 0;
 
   const handleInput = event => {
-    console.log(event.target.value);
     props.searchRequest(event.target.value)
   };
 
