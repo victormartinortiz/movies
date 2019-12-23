@@ -6,7 +6,6 @@ dotenv.config();
 const isProd = process.env.NODE_ENV === 'production';
 
 const files = getManifest();
-console.log(isProd);
 
 const render = (html, preloadedState) => {
   return `
