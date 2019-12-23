@@ -1,7 +1,7 @@
 import React from 'react';
 
 import notFoundIcon from '../assets/static/404.png';
-import '../assets/styles/components/NotFound.scss'
+import '../assets/styles/components/NotFound.scss';
 
 const notFound = () => (
   <>

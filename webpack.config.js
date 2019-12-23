@@ -1,30 +1,62 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const dotenv = require('dotenv')
+
+dotenv.config();
+
+const isProd = (process.env.NODE_ENV === 'production');
 
 module.exports = {
-  entry: {
-    app: path.resolve(__dirname, 'src/index.js')
-  },
+  devtool: isProd ? 'hidden-source-map' : 'cheap-eval-source-map',
+  entry: path.resolve(__dirname, 'src/frontend/index.js'),
+  mode: process.env.NODE_ENV,
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name].[hash].js',
-    publicPath: 'http://localhost:3001/',
-    chunkFilename: 'js/[id].[chunkhash].js'
+    path: isProd ? path.join(process.cwd(), './src/server/public') : '/',
+    filename: isProd ? 'assets/app.[hash].js' : 'assets/app.js',
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx']
   },
   optimization: {
-    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()]
+    minimizer: isProd ? [new TerserPlugin()] : [],
+    splitChunks: {
+      chunks: 'async',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 1,
+          filename: isProd ? 'assets/vendor.[hash].js' : 'assets/vendor.js',
+          enforce: true,
+          test(module, chunks) {
+            const name = module.nameForCondition && module.nameForCondition();
+            return chunks.some(
+              chunks =>
+                chunks.name !== 'vendor' && /[\\/]node_modules[\\/]/.test(name)
+            );
+          }
+        }
+      }
+    }
   },
   module: {
     rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        enforce: 'pre',
+        use: {
+          loader: 'eslint-loader'
+        }
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -37,39 +69,65 @@ module.exports = {
         use: [
           { loader: MiniCssExtractPlugin.loader },
           'css-loader',
-          'sass-loader'
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              prependData: `
+              @import "${path.resolve(
+    __dirname,
+    'src/frontend/assets/styles/Vars.scss'
+  )}";
+              @import "${path.resolve(
+    __dirname,
+    'src/frontend/assets/styles/Media.scss'
+  )}";
+              @import "${path.resolve(
+    __dirname,
+    'src/frontend/assets/styles/Base.scss'
+  )}";
+              `
+            }
+          }
         ]
       },
       {
         test: /\.(png|gif|jpg)$/,
         use: [
           {
-            loader: 'url-loader',
-            options: { limit: 1000, name: '[hash].[ext]', outputPath: 'assets' }
+            loader: 'file-loader',
+            options: {
+              name: 'assets/[hash].[ext]'
+            }
           }
         ]
       }
     ]
   },
+  devServer: {
+    historyApiFallback: true
+  },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public/index.html')
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [autoprefixer()]
+      }
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash].css',
-      chunkFilename: 'css/[id].[hash].css'
-    }),
-    new webpack.DllReferencePlugin({
-      // eslint-disable-next-line global-require
-      manifest: require('./modules-manifest.json')
-    }),
-    new AddAssetHtmlPlugin({
-      filepath: path.resolve(__dirname, 'dist/js/*.dll.js'),
-      outputPath: 'js',
-      publicPath: 'http://localhost:3001/js'
-    }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/app.*']
+      filename: isProd ? 'assets/app.[hash].css' : 'assets/app.css'
     })
   ]
 };
+
+if (isProd) {
+  module.exports.plugins.push(
+    new CompressionPlugin({
+      test: /\.js$|\.css$/,
+      filename: '[path].gz'
+    })
+  );
+  module.exports.plugins.push(
+    new ManifestPlugin()
+  );
+}

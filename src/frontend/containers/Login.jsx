@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loginRequest } from '../actions/index';
+import '../assets/styles/components/Login.scss';
 
 import googleIcon from '../assets/static/google-icon.png';
 import twitterIcon from '../assets/static/twitter-icon.png';
-
-import '../assets/styles/components/Login.scss';
 
 const Login = props => {
   const [form, setValue] = useState({
